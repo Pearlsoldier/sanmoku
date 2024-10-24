@@ -1,49 +1,67 @@
 
+# 返り値はNoneで、出力のみを行う。
 def print_board(board: list[list[str]]) -> None:
     for row in board:
         print(*row)
 
-#返り値はどうしたらよいか。。。。
-#型は何の指定をしたらよいか。
-def turn():
-    print("xxxxのターンです")
-    print("行0-2を入力してください")
-    row = int(input())
-    print("列0-2を入力してください")
-    column = int(input())
-    return row, column
+def set_stone(p,game_board):
+    try:
+        print(f"{p}のターンです")
+        print("行0-2を入力してください")
+        row = int(input())
+        print("列0-2を入力してください")
+        column = int(input())
+        game_board[row][column] = p
+        print_board(board = game_board)
+        if p == "◯":
+            p = "×"
+        else:
+            p = "◯"
 
-
-#したいこと、
-# print_bord関数で現在の盤面を表示
-# turn関数で行列入力を受け付ける→return で受け付けたrow,columnを返り値にする
-# 交互に行って９回まで行う。
-#for _ in range(9):
+        return p, game_board
+    except ValueError:
+        print("0-2の数字を入力してください")
+    except IndexError:
+        print("盤外を選択されました")
 
 
 def main():
-    player1 = "◯"
-    player2 = "✗"
-
     game_board = [["-" for _ in range(3)] for _ in range(3)]
-    print_board(board=game_board)
+    print_board(board = game_board)
+    for turn in range(9):
+            if turn % 2 == 0:
+                player = "◯"
+                set_stone(p = player, game_board = game_board)
+            else:
+                player = "×"
+                set_stone(p = player, game_board = game_board)
+            game_winner(game_board)
 
-    #for _ in range(9):
-    
-    turn()
-    game_board[row][column] = player1
-#UnboundLocalError: cannot access local variable 'row' where it is not associated with a value
-#rowにあくせすできません。→グローバル変数ではなく、範囲外だからではないか？
-    print("player2のターンです")
-    print("行0-2を入力してください")
-    row = int(input())
-    print("列0-2を入力してください")
-    column = int(input())
-    game_board[row][column] = player2
+def game_winner(game_board):
+    if "-" not in game_board[0][0] and game_board[0][0] == game_board[0][1] == game_board[0][2] \
+    or \
+    "-" not in game_board[1][0] and game_board[1][0] == game_board[1][1] == game_board[1][2] \
+    or \
+    "-" not in game_board[2][0] and game_board[2][0] == game_board[2][1] == game_board[2][2] \
+    or \
+    "-" not in game_board[0][0] and game_board[0][0] == game_board[1][1] == game_board[2][2] \
+    or \
+    "-" not in game_board[0][0] and game_board[0][0] == game_board[1][0] == game_board[2][0] \
+    or \
+    "-" not in game_board[0][1] and game_board[0][1] == game_board[1][1] == game_board[2][1] \
+    or \
+    "-" not in game_board[0][2] and game_board[0][2] == game_board[1][2] == game_board[2][2] \
+    or \
+    "-" not in game_board[0][0] and game_board[0][0] == game_board[1][1] == game_board[2][2] \
+    or \
+    "-" not in game_board[2][0] and game_board[2][0] == game_board[1][1] == game_board[0][2]:
+        print("WIN")
 
-    print_board(board=game_board)
 
-   
+    # for turn in range(9):
+    #     set_stone(p = player1)
+    #     print_board(board=game_board)
+    #     # playerを交代させる
 
 
 if __name__ == '__main__':
